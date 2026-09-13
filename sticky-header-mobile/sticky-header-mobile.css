@@ -1,0 +1,83 @@
+/* ==========================================================================
+   Sticky Header — Mobile only
+   ---------------------------------------------------------------------------
+   הקובץ הזה לא עובד לבד: הוא מסתמך על המחלקות ומשתני ה-CSS
+   ש-sticky-header-mobile.js מוסיף (shm-on / shm-host / --shm-h / --shm-top).
+   הגדרת נקודת השבירה נמצאת ב-JS בלבד (CONFIG.maxWidth) — אין כאן media query
+   בכוונה, כדי שלא יהיו שתי הגדרות breakpoint שנפרדות אחת מהשנייה.
+   ========================================================================== */
+
+:root {
+  --shm-h: 0px;    /* גובה ההדר בפועל — נמדד ומתעדכן ב-JS */
+  --shm-top: 0px;  /* היסט עליון (סרגל הניהול של וורדפרס, אם הוא fixed) */
+  --shm-z: 9990;   /* מתחת ל-#wpadminbar (99999) ומעל תוכן אלמנטור */
+}
+
+/* --- ההדר עצמו --------------------------------------------------------- */
+.shm-on .shm-host {
+  position: fixed !important;
+  top: var(--shm-top) !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  width: 100% !important;
+  margin: 0 !important;
+  z-index: var(--shm-z) !important;
+  transition: box-shadow .2s ease;
+  /* מונע "ריצוד" של הדר fixed בזמן גלילה אינרציאלית ב-iOS */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* הרקע של ההדר נשאר של האתר. רקע נוסף מוחל רק אם ה-JS מצא שההדר שקוף לגמרי —
+   הדר שקוף שנעשה דביק הופך לבלתי קריא מעל התוכן שנגלל מתחתיו.
+   לשליטה בצבע: --shm-bg (למשל :root { --shm-bg: #0b1f3a; }) */
+.shm-on .shm-host.shm-needs-bg {
+  background-color: var(--shm-bg, #fff);
+}
+
+/* צל עדין רק אחרי שהתחילה גלילה, כדי שההדר לא "ירחף" כשגוללים בראש הדף */
+.shm-on .shm-host.shm-scrolled {
+  box-shadow: var(--shm-shadow, 0 2px 10px rgba(0, 0, 0, .12));
+}
+
+/* --- המרווח שתופס את מקום ההדר במסמך ----------------------------------- */
+/* עדיף על padding-top ל-body: לא נלחם בתבנית, ולא נשבר כשלתבנית יש padding משלה */
+.shm-spacer { display: none; }
+.shm-on .shm-spacer {
+  display: block;
+  width: 100%;
+  height: var(--shm-h);
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
+/* --- תפריט מובייל פתוח -------------------------------------------------- */
+/* בהדר fixed תפריט ארוך נחתך מתחת לקצה המסך. כשהתפריט נפתח ההדר עצמו הופך
+   לאזור גלילה, כך שכל פריטי התפריט נגישים גם במסך נמוך ובמצב לרוחב. */
+.shm-on .shm-host.shm-menu-open {
+  max-height: calc(100dvh - var(--shm-top));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* --- עוגנים בתוך הדף ---------------------------------------------------- */
+/* בלי זה קישור אל #anchor קופץ אל מתחת להדר הדביק */
+.shm-on {
+  scroll-padding-top: calc(var(--shm-h) + var(--shm-top) + 8px);
+}
+
+/* --- בטיחות ------------------------------------------------------------- */
+/* אלמנטור הופך אבות-קדמון ל-containing block דרך transform ואז fixed נשבר.
+   ה-JS מנטרל את זה על שרשרת ההורים של ההדר בלבד. */
+.shm-on .shm-unstick-ancestor {
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+  backdrop-filter: none !important;
+  will-change: auto !important;
+}
+
+/* אם יש באתר עוד רכיב שנועל את ראש המסך (פס התראה וכו'), אפשר להוסיף לו
+   את המחלקה shm-offset-above והוא ייספר אוטומטית בתוך --shm-top. */
