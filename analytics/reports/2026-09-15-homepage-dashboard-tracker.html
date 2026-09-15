@@ -1,0 +1,331 @@
+<title>מעקב ליקויים מרכזיות טלפונים</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F2F5F7; --surface:#FFFFFF; --surface-2:#E9EEF2;
+  --ink:#141A21; --ink-2:#3C4855; --muted:#69798A; --hair:#D3DCE4;
+  --accent:#1F5E80; --accent-soft:#DCEAF2;
+  --crit:#B03A32; --crit-soft:#F7E2E0;
+  --warn:#9C6410; --warn-soft:#FAEBD6;
+  --good:#256F52; --good-soft:#DCEFE6;
+  --shadow:0 1px 2px rgba(20,26,33,.06),0 8px 20px -12px rgba(20,26,33,.22);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E1318; --surface:#161D25; --surface-2:#1E2731;
+  --ink:#E6ECF2; --ink-2:#B6C3CF; --muted:#8395A5; --hair:#2A3642;
+  --accent:#6FB6D9; --accent-soft:#16303F;
+  --crit:#E8867D; --crit-soft:#341917;
+  --warn:#DFA84F; --warn-soft:#332413;
+  --good:#6FC79C; --good-soft:#13301F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 24px -14px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1318; --surface:#161D25; --surface-2:#1E2731;
+  --ink:#E6ECF2; --ink-2:#B6C3CF; --muted:#8395A5; --hair:#2A3642;
+  --accent:#6FB6D9; --accent-soft:#16303F;
+  --crit:#E8867D; --crit-soft:#341917;
+  --warn:#DFA84F; --warn-soft:#332413;
+  --good:#6FC79C; --good-soft:#13301F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 24px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{direction:rtl;background:var(--ground);color:var(--ink);
+  font-family:"Assistant",-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1060px;margin:0 auto;padding-inline:16px;padding-block:0 64px}
+h1,h2,h3{font-family:"Frank Ruhl Libre",Georgia,serif;text-wrap:balance;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.84em;direction:ltr;display:inline-block}
+header{border-bottom:1px solid var(--hair);background:var(--surface)}
+.hd{max-width:1060px;margin:0 auto;padding-inline:16px;padding-block:26px 22px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:clamp(25px,4.4vw,38px);font-weight:900;line-height:1.15;margin-block:8px 10px}
+.sub{color:var(--ink-2);max-width:64ch;margin:0}
+.progress{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pbar{flex:1;min-width:180px;height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.pfill{height:100%;background:var(--good);width:0%;transition:width .25s ease}
+.pnum{font-variant-numeric:tabular-nums;font-weight:700;font-size:14px;color:var(--ink-2)}
+section{margin-block:38px}
+h2{font-size:22px;font-weight:700;margin-bottom:6px}
+h2 .k{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:400;margin-inline-end:10px}
+.lede{color:var(--ink-2);max-width:66ch;margin-block:0 18px}
+.chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.fail{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:18px;
+  border-top:3px solid var(--crit);display:flex;flex-direction:column;gap:8px}
+.fail .tag{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--crit)}
+.fail h3{font-size:16.5px;font-weight:700}
+.fail p{margin:0;font-size:14px;color:var(--ink-2)}
+.fail .big{font-family:"Frank Ruhl Libre",serif;font-size:27px;font-weight:700;color:var(--crit);
+  font-variant-numeric:tabular-nums;line-height:1.1}
+.rows{display:flex;flex-direction:column;gap:9px}
+.row{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:14px 16px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;box-shadow:var(--shadow)}
+.row[data-done="1"]{opacity:.62}
+.sev{font-size:11.5px;font-weight:700;padding:5px 7px;border-radius:5px;white-space:nowrap;
+  font-family:"IBM Plex Mono",monospace}
+.row.P0 .sev{background:var(--crit);color:#fff}
+.row.P1 .sev{background:var(--warn);color:#fff}
+.row.P2 .sev{background:var(--accent);color:#fff}
+.row.P3 .sev{background:var(--surface-2);color:var(--muted)}
+.row h3{font-size:16px;font-weight:700;margin-bottom:3px}
+.row .ev{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.row p{margin:0;font-size:14px;color:var(--ink-2)}
+.row .fix{margin-top:6px;font-size:13.5px;color:var(--accent);font-weight:600}
+.seg{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.seg button{font-family:inherit;font-size:12px;font-weight:700;padding:6px 9px;min-height:34px;
+  border:1px solid var(--hair);background:var(--surface-2);color:var(--muted);
+  border-radius:6px;cursor:pointer;transition:background .12s ease,color .12s ease}
+.seg button:hover{background:var(--accent-soft)}
+.seg button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.seg button[aria-pressed="true"][data-s="done"]{background:var(--good);border-color:var(--good)}
+.seg button[aria-pressed="true"][data-s="blocked"]{background:var(--crit);border-color:var(--crit)}
+.seg button[aria-pressed="true"][data-s="doing"]{background:var(--warn);border-color:var(--warn)}
+.seg[data-ro="1"] button{cursor:default;opacity:.8}
+@media(max-width:700px){.row{grid-template-columns:auto 1fr}.seg{grid-column:1/-1;justify-content:flex-start}}
+.note{background:var(--surface-2);border:1px solid var(--hair);border-radius:10px;padding:15px 17px;
+  font-size:14px;color:var(--ink-2)}
+.note b{color:var(--ink)}
+.call{border-inline-start:3px solid var(--accent);background:var(--accent-soft);padding:15px 17px;
+  border-radius:0 8px 8px 0;margin-block:16px}
+.call.crit{border-color:var(--crit);background:var(--crit-soft)}
+.call h3{font-size:16px;font-weight:700;margin-bottom:5px}
+.call p{margin:0;font-size:14px;color:var(--ink-2)}
+.call p+p{margin-top:7px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--hair);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
+th,td{padding:9px 13px;text-align:start;border-bottom:1px solid var(--hair);vertical-align:top}
+th{background:var(--surface-2);font-weight:700;font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.no{color:var(--crit);font-weight:700}
+.yes{color:var(--good);font-weight:700}
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--surface);
+  border:1px solid var(--hair);border-radius:8px;padding:12px 14px;font-size:14px}
+.step b{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+@media(max-width:560px){.step{grid-template-columns:1fr;gap:4px}}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--hair);font-size:13px;color:var(--muted)}
+</style>
+
+<header>
+  <div class="hd">
+    <div class="eyebrow">מעקב יישום · Microsoft Clarity</div>
+    <h1>מעקב ליקויים — מרכזיות טלפונים</h1>
+    <p class="sub">15 ליקויים ממוינים לפי ROI, מתוך 658 סשנים בין 29/08 ל-14/09/2026. הסטטוס משותף לכל מי שפותח את העמוד.</p>
+    <div class="progress">
+      <span class="pnum" id="pnum">0 / 15 הושלמו</span>
+      <span class="pbar"><span class="pfill" id="pfill"></span></span>
+      <span class="pnum" id="pstate">טוען סטטוס…</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2><span class="k">01</span>שרשרת הכשל</h2>
+  <p class="lede">שלוש נקודות הכשל אינן שלוש בעיות. הן סיבה אחת שמתפשטת: באג עוצר סקריפט, ביצועים מאריכים את חלון הפגיעות, וארכיטקטורת הנחיתה מכוונת את כל התקציב לתוכו.</p>
+  <div class="chain">
+    <div class="fail">
+      <span class="tag">גורם שורש</span>
+      <h3>שגיאת תחביר ב-JavaScript</h3>
+      <span class="big">7 עמודים</span>
+      <p><span class="mono">unexpected token: identifier</span> — ובראשם דף הבית ו"צור קשר". שגיאת תחביר עוצרת את הסקריפט כולו, וכל מאזין אירועים בו לא נקשר לעולם.</p>
+    </div>
+    <div class="fail">
+      <span class="tag">מכפיל</span>
+      <h3>חלון פגיעות מתארך</h3>
+      <span class="big">LCP 47 שנ'</span>
+      <p>טעינה של עד 20.6 שניות בעמודי נחיתה ממומנים. ככל שהטעינה ארוכה, גדל פרק הזמן שבו הכפתור קיים על המסך אך אינו מגיב.</p>
+    </div>
+    <div class="fail">
+      <span class="tag">מגבר</span>
+      <h3>התקציב מכוון לתוך הכשל</h3>
+      <span class="big">99.05%</span>
+      <p>47% מהתנועה הממומנת נוחתת על דף הבית — העמוד עם שגיאות ה-JS הרבות ביותר — ונוטשת ב-99.05%.</p>
+    </div>
+  </div>
+  <div class="call crit">
+    <h3>ההשערה שמחברת את F-02 ו-F-05</h3>
+    <p>הטקסט <span class="mono">window.dataLayer = window…</span> מוצג כטקסט גלוי בגוף העמוד ונלחץ ב-4 סשנים. קוד שאמור לרוץ ומוצג במקום זאת כתוכן משמעו ש<b>תגית ה-<span class="mono">&lt;script&gt;</span> שעטפה אותו נשברה</b>.</p>
+    <p>וכששובר כזה מתרחש באמצע בלוק סקריפט, הדפדפן מנסה לפרסר את מה שנותר כקוד — <b>ומייצר בדיוק <span class="mono">unexpected token: identifier</span></b>. שני הליקויים הם ככל הנראה <b>אותו נזק</b>: הזרקת סקריפט פגומה, כנראה בדף הבית ובדף צור קשר — בדיוק המקומות שאליהם מדביקים סניפטים של GTM והמרות.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">02</span>לוח הליקויים</h2>
+  <p class="lede">לחצו על סטטוס כדי לעדכן. השינוי נשמר ומשותף לכל מי שפותח את העמוד.</p>
+  <div class="rows" id="board"></div>
+</section>
+
+<section>
+  <h2><span class="k">03</span>סדר ביצוע</h2>
+  <div class="steps">
+    <div class="step"><b>יום 1</b><span>F-01 (הגדרת אדס) · F-05 (הסרת קוד גלוי) — אפס פיתוח</span></div>
+    <div class="step"><b>יום 1–2</b><span>F-02 — תיקון שגיאת התחביר. גורם שורש</span></div>
+    <div class="step"><b>יום 2–3</b><span>F-03 (href נטיב) · F-09 (label for/id)</span></div>
+    <div class="step"><b>שבוע 1</b><span>F-04 (סרגל דביק) · F-07 (קיצור טופס)</span></div>
+    <div class="step"><b>נקודת בקרה</b><span>מדידה חוזרת של Dead Clicks — לפני שמשקיעים ב-F-06</span></div>
+    <div class="step"><b>שבוע 2–4</b><span>F-08 (ביצועים) · F-10 (CLS) · F-06 (בורר)</span></div>
+    <div class="step"><b>שבוע 3–4</b><span>F-11 · F-12 · F-13 (GEO)</span></div>
+    <div class="step"><b>שבוע 4</b><span>F-14 (הקצאת תקציב) · F-15 (בדיקת רספונסיביות)</span></div>
+  </div>
+  <div class="call">
+    <h3>נקודת הבקרה היא החלק החשוב</h3>
+    <p>F-02 הוא גורם שורש ל-F-03, ל-F-06 ולחלק מ-F-07. אחרי תיקון שגיאת התחביר — למדוד מחדש לפני השקעה נוספת. סביר שחלק מהליקויים ייעלמו מעצמם, והם תסמינים ולא בעיות נפרדות.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">04</span>מה לא נמדד</h2>
+  <p class="lede">מדדים שנדרשו ואינם קיימים בבסיס הנתונים. לא הוחלפו בהערכות.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>מדד</th><th>זמין</th><th>מה יש במקום</th></tr></thead>
+      <tbody>
+        <tr><td>Dead Clicks ברמת אלמנט</td><td class="yes">מלא</td><td>44 אירועים עם קישורי הקלטה</td></tr>
+        <tr><td>Rage Clicks</td><td class="yes">מלא</td><td>אירוע אחד מסווג בכל התקופה</td></tr>
+        <tr><td>Quick Backs %</td><td class="no">לא נמדד</td><td>משך סשן לפי ערוץ — חלופה תקפה</td></tr>
+        <tr><td>Excessive Scrolling</td><td class="no">לא נמדד</td><td>—</td></tr>
+        <tr><td>Scroll Depth בדלי 25/50/75</td><td class="no">לא נמדד</td><td>ממוצעים בלבד לפי ערוץ ומכשיר</td></tr>
+        <tr><td>Cold Areas</td><td style="color:var(--warn);font-weight:700">נגזר</td><td>מעומק גלילה — הסקה, לא מדידה</td></tr>
+        <tr><td>iOS מול Android</td><td class="no">לא נמדד</td><td>רק Mobile / PC / Tablet</td></tr>
+        <tr><td>גלישה אופקית 360–414px</td><td class="no">לא נמדד</td><td>דורש בדיקה ידנית</td></tr>
+        <tr><td>נטישת טופס לפי שדה</td><td class="no">לא נמדד</td><td>ספירת הקלדות בלבד, ללא זהות שדה</td></tr>
+        <tr><td>ניגודיות צבעים</td><td class="no">מחוץ ל-Clarity</td><td>דורש בדיקת WCAG</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note" style="margin-top:14px">
+    <b>הסתייגות על נטישת הטופס:</b> נרשמו 17 אירועי הקלדה ללא שליחה בדף הבית (03/09 12:14), אך לא זהות השדה. <b>אין לקבל החלטת עיצוב טופס על בסיס ניחוש כאן</b> — שלוש ההקלטות של הטפסים שנזנחו יענו על כך בוודאות תוך חמש דקות.
+  </div>
+</section>
+
+<footer>
+  מבוסס על דוחות Microsoft Clarity 29/08–14/09/2026 · 658 סשנים, 542 משתמשים ייחודיים · הפירוט המלא וקטעי הקוד נמצאים ב-<span class="mono">analytics/reports/2026-09-15-engineering-action-plan.md</span>
+</footer>
+
+</div>
+
+<script>
+var DEFECTS = [
+ {id:"F-01",p:"P0",t:"Final URL Expansion פעיל",ev:"Config · 105 מתוך 224 סשנים ממומנים",
+  d:"47% מהתנועה הממומנת נוחתת על דף הבית בנטישה 99.05% במקום על עמוד ייעודי.",
+  f:"כיבוי ההרחבה + הפניית כל קמפיין לעמוד שלו. אפס פיתוח."},
+ {id:"F-02",p:"P0",t:"שגיאת תחביר ב-JavaScript",ev:"JS Error · 7 עמודים",
+  d:"unexpected token: identifier בשבעה עמודים; Script error. ×5 בדף הבית. עוצר את הסקריפט כולו.",
+  f:"איתור בקונסולה ותיקון התחביר. גורם שורש ל-F-03, F-06 וחלק מ-F-07."},
+ {id:"F-03",p:"P0",t:"כפתורי CTA תלויי JavaScript",ev:"Dead Click · 11 כשלים מתועדים",
+  d:"'חיוג מהיר' ו'וואטסאפ' נכשלים לסירוגין. אותם כפתורים עובדים ב-6 הקלטות השוואה.",
+  f:"href נטיב (tel: / wa.me) + event delegation ברמת document."},
+ {id:"F-04",p:"P0",t:"CTA מתחת לקו הנראות",ev:"Scroll Drop · עומק גלילה ממומן 13.48%",
+  d:"86.5% מכל עמוד נחיתה ממומן הוא אזור קר. טפסים ומחשבונים תחתונים אינם נצפים.",
+  f:"סרגל CTA דביק במובייל + CTA ראשי ב-12% העליונים."},
+ {id:"F-05",p:"P1",t:"קוד dataLayer מוצג כטקסט גלוי",ev:"Content Bug · נלחץ ב-4 סשנים",
+  d:"window.dataLayer = window... מופיע בגוף העמוד. ככל הנראה אותו נזק כמו F-02.",
+  f:"הסרת הקוד מגוף העמוד. מאמץ אפסי."},
+ {id:"F-06",p:"P1",t:"רכיב בורר/מחשבון לא מגיב",ev:"Rage + Dead · 5 סשנים, 4 עמודים",
+  d:"מקור ה-Rage Click היחיד בכל התקופה: לחיצה על מדרגת '3,000–5,000' ואז Dead click על אותו אלמנט.",
+  f:"button במקום div + משוב ויזואלי מתחת ל-100 מ\"ש. למדוד אחרי F-02 קודם."},
+ {id:"F-07",p:"P1",t:"חיכוך בטופס",ev:"Form · 50% זניחה, 3 SubmitForm בשבוע",
+  d:"17 אירועי הקלדה ללא שליחה בסשן אחד. שלושה סשנים מילאו ולא שלחו.",
+  f:"שני שדות בלבד + כפתור sticky + font-size:16px למניעת זום iOS."},
+ {id:"F-08",p:"P1",t:"זמני טעינה ו-LCP",ev:"Performance · טעינה 20.6 שנ', LCP 47 שנ'",
+  d:"עמודי הנחיתה הממומנים. יוצר את חלון הפגיעות של F-03 ופוגע ב-Core Web Vitals.",
+  f:"דחיית סקריפטי צד-שלישי, loading=lazy, צמצום CSS/JS חוסם רינדור."},
+ {id:"F-09",p:"P2",t:"תוויות טופס ללא for/id",ev:"Dead Click · 3 אירועים",
+  d:"לחיצה על 'שם מלא' / 'טלפון' אינה ממקדת את השדה ואינה פותחת מקלדת.",
+  f:"קישור label ל-input ב-for/id. מרחיב את שטח המגע פי 2–3 במובייל."},
+ {id:"F-10",p:"P2",t:"CLS גבוה פי 9 מהסף",ev:"Core Web Vitals · 0.94 / 0.90 / 0.68 / 0.58",
+  d:"הסף התקני הוא 0.1. שינויי פריסה בזמן טעינה בעמודי תוכן.",
+  f:"width/height מפורשים לתמונות + min-height למכולות נטענות."},
+ {id:"F-11",p:"P2",t:"טקסט שנראה לחיץ",ev:"Dead Click · ~33 אירועים, 10–12 עמודים",
+  d:"19 לחיצות מתות על טקסט תוכן בסשן יחיד. תבנית עיצוב גלובלית.",
+  f:"הסרת cursor:pointer מטקסט — או הפיכת הבלוק לקישור אמיתי."},
+ {id:"F-12",p:"P2",t:"אין מסלול המשך בתנועה האורגנית",ev:"Dwell · 1.21 עמודים לסשן",
+  d:"שהייה של 6–9 דקות ואפס צעד הבא. הקשב נמצא באקורדיון ה-FAQ, ואין שם הזדמנות פנייה.",
+  f:"CTA אחרי השאלה השלישית + קישורים פנימיים בגוף התוכן."},
+ {id:"F-13",p:"P1",t:"תוכן FAQ ללא סימון סמנטי",ev:"GEO · ✅ מאומת ב-Search Console 15/09",
+  d:"URL Inspection מחזיר נתיבי ניווט וקטעי ביקורות בלבד. אין FAQPage כלל — התוכן שנצרך בפועל (7 ו-4 קליקים בסשן) אינו נגיש למנועי תשובות.",
+  f:"FAQPage schema + מבנה Answer-First + טבלאות כ-table סמנטי."},
+ {id:"F-14",p:"P3",t:"94% מהתקציב על מובייל",ev:"Segment · נטישה 90.05% מול 53.85%",
+  d:"211 מתוך 224 סשנים ממומנים במובייל. 13 סשני דסקטופ הם מדגם קטן — אינדיקציה בלבד.",
+  f:"למדוד מחדש אחרי F-01/03/04 לפני שינוי הקצאת תקציב."},
+ {id:"F-15",p:"P3",t:"רספונסיביות 360–414px",ev:"בדיקה · פער שהייה מובייל/דסקטופ פי 11",
+  d:"86 שניות במובייל מול 948 בדסקטופ. חריג — אך לא אומת כשבירת פריסה.",
+  f:"בדיקה ידנית ב-360/390/414px לפני כל תיקון. אל תתקן לפני שתמדוד."}
+];
+var STATES = [["open","פתוח"],["doing","בעבודה"],["done","הושלם"],["blocked","חסום"]];
+var state = {}, dbRef = null, canWrite = false;
+
+function pct(){
+  var done = DEFECTS.filter(function(d){return state[d.id]==="done";}).length;
+  document.getElementById("pnum").textContent = done + " / " + DEFECTS.length + " הושלמו";
+  document.getElementById("pfill").style.width = (done/DEFECTS.length*100) + "%";
+}
+function render(){
+  var board = document.getElementById("board");
+  board.textContent = "";
+  DEFECTS.forEach(function(d){
+    var cur = state[d.id] || "open";
+    var row = document.createElement("div");
+    row.className = "row " + d.p;
+    if (cur === "done") row.setAttribute("data-done","1");
+
+    var sev = document.createElement("span");
+    sev.className = "sev"; sev.textContent = d.id;
+    row.appendChild(sev);
+
+    var mid = document.createElement("div");
+    var h = document.createElement("h3"); h.textContent = d.t; mid.appendChild(h);
+    var ev = document.createElement("div"); ev.className = "ev"; ev.textContent = d.ev; mid.appendChild(ev);
+    var p = document.createElement("p"); p.textContent = d.d; mid.appendChild(p);
+    var fx = document.createElement("div"); fx.className = "fix"; fx.textContent = d.f; mid.appendChild(fx);
+    row.appendChild(mid);
+
+    var seg = document.createElement("div");
+    seg.className = "seg";
+    if (!canWrite) seg.setAttribute("data-ro","1");
+    STATES.forEach(function(s){
+      var b = document.createElement("button");
+      b.type = "button"; b.dataset.s = s[0]; b.textContent = s[1];
+      b.setAttribute("aria-pressed", cur === s[0] ? "true" : "false");
+      b.setAttribute("aria-label", d.id + " — " + s[1]);
+      if (canWrite) b.addEventListener("click", function(){ setStatus(d.id, s[0]); });
+      else b.disabled = true;
+      seg.appendChild(b);
+    });
+    row.appendChild(seg);
+    board.appendChild(row);
+  });
+  pct();
+}
+function setStatus(id, s){
+  if (state[id] === s) return;
+  state[id] = s;
+  render();
+  if (dbRef) {
+    dbRef.doc("defects/" + id).set({status: s, updatedAt: new Date().toISOString()})
+      .catch(function(){ document.getElementById("pstate").textContent = "העדכון לא נשמר — נסו שוב"; });
+  }
+}
+
+render();
+
+(async function(){
+  var msg = document.getElementById("pstate");
+  var db = null;
+  try { db = await claude.use("db"); } catch (e) { db = null; }
+  if (!db) { msg.textContent = "מצב קריאה בלבד — הסטטוס אינו נשמר"; return; }
+  dbRef = db; canWrite = true;
+  msg.textContent = "סטטוס משותף · מתעדכן חי";
+  try {
+    db.collection("defects").onSnapshot(function(snap){
+      snap.docs.forEach(function(doc){
+        var body = doc.data();
+        if (body && typeof body.status === "string") state[doc.id] = body.status;
+      });
+      render();
+    }, function(){ msg.textContent = "החיבור נותק — רעננו את העמוד"; });
+  } catch (e) { msg.textContent = "מצב קריאה בלבד — הסטטוס אינו נשמר"; }
+  render();
+})();
+</script>
