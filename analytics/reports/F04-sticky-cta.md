@@ -1,5 +1,8 @@
 # F-04 · סרגל CTA דביק למובייל — קוד להטמעה
 
+> 🔴 **תוקן 15/09:** מספר הוואטסאפ בגרסה הראשונה היה `972778123111` — **שגוי**.
+> `077-812-3111` הוא קו נייח ואין לו וואטסאפ. הנכון: **`972529771713`**.
+
 **עילה:** עומק גלילה ממומן **13.48%** — 86.5% מכל עמוד נחיתה ממומן הוא אזור קר.
 **יעד:** עומק גלילה ממומן מעל 25%, נטישה ממומנת מתחת ל-75%, אפס Dead Clicks על CTA.
 
@@ -23,7 +26,7 @@
   </a>
 
   <a class="tc-cta__btn tc-cta__btn--wa"
-     href="https://wa.me/972778123111?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D"
+     href="https://wa.me/972529771713?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D"
      target="_blank" rel="noopener"
      data-cta="whatsapp">
     <svg class="tc-cta__ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -168,7 +171,7 @@ document.addEventListener('click', function (e) {
 document.querySelectorAll('.tc-cta__btn').forEach(function(a){
   console.log(a.tagName, a.getAttribute('href') || '⚠️ חסר href');
 });
-// ציפייה: A tel:+972778123111  |  A https://wa.me/972778123111?text=...
+// ציפייה: A tel:+972778123111  |  A https://wa.me/972529771713?text=...
 
 // 2. גובה מטרת מגע
 document.querySelectorAll('.tc-cta__btn').forEach(function(a){
