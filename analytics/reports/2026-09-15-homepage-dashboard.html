@@ -1,0 +1,428 @@
+<title>דף הבית מרכזיות טלפונים</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F2F5F7; --surface:#FFFFFF; --surface-2:#E9EEF2;
+  --ink:#141A21; --ink-2:#3C4855; --muted:#69798A; --hair:#D3DCE4;
+  --accent:#1F5E80; --accent-soft:#DCEAF2;
+  --crit:#B03A32; --crit-soft:#F7E2E0;
+  --warn:#9C6410; --warn-soft:#FAEBD6;
+  --good:#256F52; --good-soft:#DCEFE6;
+  --shadow:0 1px 2px rgba(20,26,33,.06),0 8px 20px -12px rgba(20,26,33,.22);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1318; --surface:#161D25; --surface-2:#1E2731;
+    --ink:#E6ECF2; --ink-2:#B6C3CF; --muted:#8395A5; --hair:#2A3642;
+    --accent:#6FB6D9; --accent-soft:#16303F;
+    --crit:#E8867D; --crit-soft:#341917;
+    --warn:#DFA84F; --warn-soft:#332413;
+    --good:#6FC79C; --good-soft:#13301F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 24px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1318; --surface:#161D25; --surface-2:#1E2731;
+  --ink:#E6ECF2; --ink-2:#B6C3CF; --muted:#8395A5; --hair:#2A3642;
+  --accent:#6FB6D9; --accent-soft:#16303F;
+  --crit:#E8867D; --crit-soft:#341917;
+  --warn:#DFA84F; --warn-soft:#332413;
+  --good:#6FC79C; --good-soft:#13301F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 24px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{
+  direction:rtl; background:var(--ground); color:var(--ink);
+  font-family:"Assistant",-apple-system,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.6; margin:0;
+}
+.wrap{max-width:1080px; margin:0 auto; padding-inline:16px; padding-block:0 64px}
+h1,h2,h3{font-family:"Frank Ruhl Libre",Georgia,serif; text-wrap:balance; margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.82em; direction:ltr; display:inline-block}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+header{border-bottom:1px solid var(--hair); background:var(--surface); margin-bottom:28px}
+.hd{max-width:1080px; margin:0 auto; padding-inline:16px; padding-block:26px 22px}
+.eyebrow{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:700}
+h1{font-size:clamp(26px,4.6vw,40px); font-weight:900; line-height:1.15; margin-block:8px 10px}
+.sub{color:var(--ink-2); max-width:62ch}
+.meta{display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:16px; font-size:13.5px; color:var(--muted)}
+.meta b{color:var(--ink-2); font-weight:600}
+
+/* sections */
+section{margin-block:40px}
+h2{font-size:23px; font-weight:700; margin-bottom:6px}
+h2 .k{color:var(--muted); font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:400; margin-inline-end:10px}
+.lede{color:var(--ink-2); max-width:66ch; margin-block:0 20px}
+
+/* kpi */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:1px; background:var(--hair);
+      border:1px solid var(--hair); border-radius:10px; overflow:hidden}
+.kpi{background:var(--surface); padding:16px 16px 14px; display:flex; flex-direction:column; gap:3px}
+.kpi .lab{font-size:12.5px; color:var(--muted); font-weight:600}
+.kpi .val{font-size:30px; font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums; font-family:"Frank Ruhl Libre",serif}
+.kpi .note{font-size:12px; color:var(--muted)}
+.kpi.c .val{color:var(--crit)} .kpi.g .val{color:var(--good)} .kpi.w .val{color:var(--warn)}
+
+/* generic panel */
+.panel{background:var(--surface); border:1px solid var(--hair); border-radius:10px; padding:20px; box-shadow:var(--shadow)}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+/* scroll silhouette */
+.silo{display:flex; gap:18px; align-items:stretch}
+.page-fig{position:relative; width:112px; flex:none; border:1px solid var(--hair); border-radius:6px;
+          background:linear-gradient(var(--surface-2),var(--surface-2)); height:290px; overflow:hidden}
+.seen{position:absolute; inset-inline:0; top:0; height:34.63%; background:var(--accent-soft);
+      border-bottom:2px solid var(--accent)}
+.cutlab{position:absolute; inset-inline-start:0; top:34.63%; transform:translateY(-50%);
+        background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; padding:2px 6px;
+        border-radius:0 4px 4px 0; font-variant-numeric:tabular-nums}
+.ctabox{position:absolute; inset-inline:12px; bottom:16px; height:34px; border:1.5px dashed var(--crit);
+        border-radius:5px; color:var(--crit); font-size:11px; font-weight:700; display:grid; place-items:center}
+.silo-txt{font-size:14.5px; color:var(--ink-2)}
+.silo-txt b{color:var(--ink)}
+
+/* bars */
+.bars{display:flex; flex-direction:column; gap:11px}
+.bar-row{display:grid; grid-template-columns:132px 1fr 52px; gap:10px; align-items:center; font-size:13.5px}
+.bar-track{background:var(--surface-2); border-radius:3px; height:19px; overflow:hidden}
+.bar-fill{height:100%; border-radius:3px}
+.bar-val{text-align:start; font-variant-numeric:tabular-nums; font-weight:600; font-size:13px}
+.bar-lab{color:var(--ink-2)}
+
+/* days */
+.days{display:grid; grid-template-columns:repeat(8,1fr); gap:6px; align-items:end; height:120px; margin-top:8px}
+.day{display:flex; flex-direction:column; justify-content:flex-end; height:100%; gap:5px; text-align:center}
+.day .col{background:var(--crit-soft); border:1px solid var(--crit); border-radius:3px 3px 0 0; min-height:3px}
+.day.on .col{background:var(--good-soft); border-color:var(--good)}
+.day .d{font-size:10.5px; color:var(--muted); font-variant-numeric:tabular-nums}
+.day .n{font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; color:var(--crit)}
+.day.on .n{color:var(--good)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto; border:1px solid var(--hair); border-radius:10px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:520px}
+th,td{padding:10px 13px; text-align:start; border-bottom:1px solid var(--hair); vertical-align:top}
+th{background:var(--surface-2); font-weight:700; font-size:12.5px; color:var(--ink-2); white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
+
+.pill{display:inline-block; font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:20px; white-space:nowrap}
+.p-c{background:var(--crit-soft); color:var(--crit)}
+.p-w{background:var(--warn-soft); color:var(--warn)}
+.p-g{background:var(--good-soft); color:var(--good)}
+.p-n{background:var(--surface-2); color:var(--muted)}
+
+/* callout */
+.call{border-inline-start:3px solid var(--accent); background:var(--accent-soft); padding:16px 18px;
+      border-radius:0 8px 8px 0; margin-block:18px}
+.call.crit{border-color:var(--crit); background:var(--crit-soft)}
+.call h3{font-size:16.5px; font-weight:700; margin-bottom:5px}
+.call p{margin:0; font-size:14.5px; color:var(--ink-2)}
+.call p+p{margin-top:8px}
+
+/* goals */
+.goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:16px}
+.goal{background:var(--surface); border:1px solid var(--hair); border-radius:10px; padding:18px; display:flex; flex-direction:column; gap:10px}
+.goal .gt{font-family:"Frank Ruhl Libre",serif; font-size:17px; font-weight:700}
+.goal .verdict{font-size:13px; font-weight:700}
+.goal ul{margin:0; padding-inline-start:18px; font-size:14px; color:var(--ink-2); display:flex; flex-direction:column; gap:5px}
+
+/* recs */
+.recs{display:flex; flex-direction:column; gap:12px}
+.rec{background:var(--surface); border:1px solid var(--hair); border-radius:10px; padding:16px 18px;
+     display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start}
+.rec .sev{writing-mode:vertical-rl; text-orientation:mixed; font-size:11.5px; font-weight:700;
+          padding:6px 4px; border-radius:4px; letter-spacing:.06em; text-align:center}
+.rec.p0 .sev{background:var(--crit); color:#fff}
+.rec.p1 .sev{background:var(--warn); color:#fff}
+.rec.p2 .sev{background:var(--accent); color:#fff}
+.rec.p3 .sev{background:var(--surface-2); color:var(--muted)}
+.rec h3{font-size:16.5px; font-weight:700; margin-bottom:4px}
+.rec .ev{font-size:13px; color:var(--muted); margin-bottom:7px}
+.rec p{margin:0; font-size:14.5px; color:var(--ink-2)}
+.rec .kpi-line{margin-top:8px; font-size:13px; color:var(--good); font-weight:600}
+
+.caveat{background:var(--surface-2); border:1px solid var(--hair); border-radius:10px; padding:16px 18px; font-size:14px; color:var(--ink-2)}
+.caveat b{color:var(--ink)}
+footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--hair); font-size:13px; color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.kpi,.rec{transition:none}}
+</style>
+
+<header>
+  <div class="hd">
+    <div class="eyebrow">ניתוח Microsoft Clarity</div>
+    <h1>דף הבית — מרכזיות טלפונים</h1>
+    <p class="sub">הכוונה קיימת ושורדת 76 שניות של המתנה. מה שלא שורד הוא המסלול מהקליק אל הפנייה.</p>
+    <div class="meta">
+      <span><b>חלון:</b> 05/09 – 14/09/2026</span>
+      <span><b>היקף:</b> דף השורש <span class="mono">/</span> בלבד</span>
+      <span><b>מקור:</b> דוח שבועי + יומיים 13–14/09</span>
+      <span><b>הופק:</b> 15/09/2026</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2><span class="k">01</span>מדדי דף הבית</h2>
+  <p class="lede">60 סשנים — 26% מתנועת האתר. המדדים מסודרים לפי מה שדורש פעולה, לא לפי סדר הדשבורד.</p>
+  <div class="kpis">
+    <div class="kpi"><span class="lab">סשנים</span><span class="val num">60</span><span class="note">05–12/09</span></div>
+    <div class="kpi g"><span class="lab">עומק גלילה</span><span class="val num">34.6%</span><span class="note">מעל ממוצע האתר (26.5%)</span></div>
+    <div class="kpi c"><span class="lab">נטישה — נחיתה ממומנת</span><span class="val num">90.9%</span><span class="note">11 סשנים</span></div>
+    <div class="kpi c"><span class="lab">זמן טעינה שיא</span><span class="val num">76.5s</span><span class="note">LCP 75.0s — הגרוע באתר</span></div>
+    <div class="kpi w"><span class="lab">Dead clicks</span><span class="val num">7</span><span class="note">שני בגודלו מכל העמודים</span></div>
+    <div class="kpi g"><span class="lab">Rage clicks</span><span class="val num">0</span><span class="note">אפס בכל האתר</span></div>
+    <div class="kpi"><span class="lab">המרות מאומתות</span><span class="val num">3</span><span class="note">5.0% מהסשנים</span></div>
+    <div class="kpi c"><span class="lab">ניסיונות שנכשלו</span><span class="val num">1</span><span class="note">25% מניסיונות הקשר</span></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">02</span>מפת חום — קו העצירה</h2>
+  <p class="lede">מפת חום ויזואלית אינה נכללת בדוחות המייל. מה שכן קיים — עומק גלילה מספרי ורשימת אלמנטים ברמת סלקטור — הוא החלק שממנו נגזרת פעולה.</p>
+  <div class="grid2">
+    <div class="panel">
+      <div class="silo">
+        <div class="page-fig">
+          <div class="seen"></div>
+          <div class="cutlab">34.6%</div>
+          <div class="ctabox">CTA כאן — לא נצפה</div>
+        </div>
+        <div class="silo-txt">
+          <p style="margin-top:0"><b>שלוש מדידות בלתי תלויות מתכנסות לאותו מספר:</b></p>
+          <p style="margin:0">דף הבית 05–12/09 — <b class="num">34.63%</b><br>
+             אורגני 13/09 — <b class="num">35.83%</b><br>
+             אורגני 14/09 — <b class="num">35.64%</b></p>
+          <p style="margin-bottom:0">זה אינו רעש. זו נקודת העצירה האמיתית. כל תוכן מתחת ל-35% מגובה העמוד אינו נצפה על ידי רוב הגולשים.</p>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:12px">נטישה — היכן דף הבית עומד</h3>
+      <div class="bars">
+        <div class="bar-row"><span class="bar-lab">ממומן — כלל האתר</span><span class="bar-track"><span class="bar-fill" style="width:95.92%;background:var(--crit)"></span></span><span class="bar-val">95.9%</span></div>
+        <div class="bar-row"><span class="bar-lab"><b>דף הבית — ממומן</b></span><span class="bar-track"><span class="bar-fill" style="width:90.91%;background:var(--crit)"></span></span><span class="bar-val">90.9%</span></div>
+        <div class="bar-row"><span class="bar-lab">מובייל</span><span class="bar-track"><span class="bar-fill" style="width:86.84%;background:var(--warn)"></span></span><span class="bar-val">86.8%</span></div>
+        <div class="bar-row"><span class="bar-lab">אורגני — כלל האתר</span><span class="bar-track"><span class="bar-fill" style="width:86.17%;background:var(--warn)"></span></span><span class="bar-val">86.2%</span></div>
+        <div class="bar-row"><span class="bar-lab">דסקטופ</span><span class="bar-track"><span class="bar-fill" style="width:64.91%;background:var(--accent)"></span></span><span class="bar-val">64.9%</span></div>
+      </div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:0;margin-top:14px">פער מובייל–דסקטופ: <b style="color:var(--crit)">22 נקודות אחוז</b>, כשמובייל הוא מחצית מהתנועה.</p>
+    </div>
+  </div>
+  <div class="call">
+    <h3>דפוס הקליקים הבולט בדף הבית</h3>
+    <p>13/09, סשן אורגני, 13:40 — <b>5 דקות ו-15 שניות, 7 קליקים על שאלות נפוצות, אפס פנייה.</b> הגולש שאל על עלות מול מרכזייה מסורתית, על ההבדל בין ענן לפיזית, ועל מי עומד מאחורי המרכזייה. מוקד תשומת הלב בדף הבית הוא אזור ה-FAQ — לא אזור ה-CTA.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">03</span>Dead clicks — סינון הרעש</h2>
+  <p class="lede">ביקשת לנטרל False Positives על שדות טופס. בדקתי — זה לא מה שקורה כאן, והממצא האמיתי חמור יותר.</p>
+
+  <div class="call crit">
+    <h3>ההנחה המקורית לא מתאשרת</h3>
+    <p>מתוך 24 ה-Dead clicks באתר, <b>23 הם על טקסט תוכן שעוצב כך שהוא נראה לחיץ ואינו לחיץ</b> — כותרות, פסקאות ולוגו, על פני 12 עמודים. זו אינה שגיאת מדידה אלא תבנית עיצוב שבורה. הגולש לוחץ כי העיצוב הבטיח לו שמשהו יקרה.</p>
+    <p>והמקרה היחיד שכן נוגע בטופס — <b>תוויות "שם מלא / טלפון / דואר אלקטרוני" — הוא באג אמיתי ואסור לסנן אותו.</b> תגיות ה-<span class="mono">label</span> אינן מקושרות לשדות ב-<span class="mono">for</span>/<span class="mono">id</span>, ולכן הלחיצה באמת לא עושה דבר: אין פוקוס, אין מקלדת. כלל הסינון "דילוג על אלמנטי טופס" היה מסתיר כאן את הממצא היקר ביותר.</p>
+    <p><b>הקריטריון הנכון אינו סוג האלמנט אלא האם נרשמה תגובה בפועל</b> — פוקוס, מקלדת, שינוי DOM.</p>
+  </div>
+
+  <h3 style="font-size:16.5px;font-weight:700;margin-block:24px 10px">אלמנטים חוזרים — סף ≥3 הקלטות ו-≥2 משתמשים</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>אלמנט</th><th>אירועים</th><th>עמודים</th><th>הקלטות</th><th>סף</th></tr></thead>
+      <tbody>
+        <tr><td><b>"חיוג מהיר" / מספר טלפון</b></td><td class="n">≥6</td><td>3 עמודים</td><td class="n mono">10/09 05:14 · 06/09 13:02 ×3 · 14/09 23:31 ×2</td><td><span class="pill p-c">עובר</span></td></tr>
+        <tr><td><b>תוויות טופס</b></td><td class="n">3</td><td><span class="mono">/קווי-תמסורת/</span></td><td class="n mono">06/09 09:25</td><td><span class="pill p-c">עובר</span></td></tr>
+        <tr><td><b>טקסט שנראה לחיץ</b></td><td class="n">23</td><td>12 עמודים</td><td>פזור</td><td><span class="pill p-c">עובר</span></td></tr>
+        <tr><td>ווידג'ט וואטסאפ</td><td class="n">1</td><td><b>דף הבית</b> (ממומן)</td><td class="n mono">06/09 09:00</td><td><span class="pill p-w">מתחת</span></td></tr>
+        <tr><td>אקורדיון FAQ שלא נפתח</td><td class="n">1</td><td><span class="mono">/מרכזיות-יהלום/</span></td><td class="n mono">14/09 14:44</td><td><span class="pill p-n">מתחת</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="call">
+    <h3>"חיוג מהיר" — אבחנת שורש, לא תיאור</h3>
+    <p>הראיה החזקה היא השוואתית. יש הקלטות שבהן הכפתור <b>כן</b> עבד (דף הבית 06/09 14:07 · מספרים־מקוצרים 06/09 13:07 · קווי־תמסורת 06/09 12:57) ויש שבהן לא (ip-centrex 10/09 05:14 · קווי־תמסורת 06/09 13:02 · מספרים־מקוצרים 14/09 23:31).</p>
+    <p><b>ההבדל המבחין:</b> בהצלחות הלחיצה בוצעה אחרי שהעמוד התייצב; בכשלונות — על עמוד שעדיין נטען. הכפתור תלוי ב-JavaScript שטרם נטען, ובדף הבית חלון הפגיעות הזה נמשך עד 76 שניות.</p>
+  </div>
+
+  <div class="caveat" style="margin-top:16px">
+    <b>Rage clicks: אפס</b> בכל האתר — שאילתת <span class="mono">rageClickPresent=true</span> החזירה ריק. אותר דפוס חריג אחד שאינו מסווג רשמית: סשן ממומן ב-<span class="mono">/קווי-תמסורת/</span> עם <b class="num">255 לחיצות ב-6:22 דקות</b>, מתוכן 69 על "חיוג מהיר" ו-3 מתות. נפח כזה אינו אופייני להתנהגות אנושית — ייתכן תסכול וייתכן פעילות אוטומטית. <b>אין להסיק ממנו; יש לאמת מול יומן השיחות.</b>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">04</span>הקלטות דף הבית</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>תוצאה</th><th>סוג</th><th>ערוץ</th><th>מועד</th><th>מזהה הקלטה</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill p-g">המרה</span></td><td>השארת טלפון לחזרה</td><td>ישיר</td><td class="n">09/09 07:33</td><td class="mono">19b1922/1pl19kz</td></tr>
+        <tr><td><span class="pill p-g">המרה</span></td><td>חיוג מהיר</td><td>ממומן</td><td class="n">06/09 14:07</td><td class="mono">1b5ig7b/1tv1s2d</td></tr>
+        <tr><td><span class="pill p-g">המרה</span></td><td>וואטסאפ</td><td>ממומן</td><td class="n">06/09 12:04</td><td class="mono">386jnr/1bag128</td></tr>
+        <tr><td><span class="pill p-c">Dead click</span></td><td>וואטסאפ — לא הגיב</td><td><b>ממומן</b></td><td class="n">06/09 09:00</td><td class="mono">1gs3wxc/ajuixo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="call crit">
+    <h3>הממצא החזק ביותר בדוח</h3>
+    <p>ההקלטה <span class="mono">19b1922/1pl19kz</span> מופיעה פעמיים בדוח השבועי: פעם ברשימת זמני הטעינה — <b>76,518 מ"ש, LCP 75.0 שניות</b>, הגרוע באתר — ופעם ברשימת ההמרות, כ"השארת טלפון לחזרה".</p>
+    <p><b>אותה הקלטה בדיוק.</b> גולש המתין 76 שניות לטעינת דף הבית — ובכל זאת השאיר טלפון. זו הראיה לכך שהבעיה אינה בהצעה, במסר או בקהל. הכוונה חזקה מספיק כדי לשרוד 76 שניות; כל מי שנטש לפני כן נטש בגלל האתר.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">05</span>שלוש המטרות העסקיות</h2>
+  <div class="goals">
+    <div class="goal">
+      <span class="gt">הגדלת זמן שהייה</span>
+      <span class="verdict" style="color:var(--good)">אינו החסם</span>
+      <ul>
+        <li>עומק גלילה 34.6% — מעל ממוצע האתר</li>
+        <li>אורגני 13/09: 415 שנ' (6:55)</li>
+        <li>אורגני 14/09: 110 שנ' — צניחה מיוחסת לתמהיל תנועה, לא להרעה בעמוד</li>
+        <li><b>החסם:</b> הזמן מושקע ב-FAQ, לא במסלול ההמרה</li>
+      </ul>
+    </div>
+    <div class="goal">
+      <span class="gt">הגדלת אחוזי המרה</span>
+      <span class="verdict" style="color:var(--crit)">חסם ישיר ומדיד</span>
+      <ul>
+        <li>3 המרות / 60 סשנים = <b>5.0%</b></li>
+        <li>ניסיון אחד נכשל → פוטנציאל <b>6.7%</b> (+33%)</li>
+        <li>25% מניסיונות יצירת הקשר נכשלו</li>
+        <li><b>החסם:</b> CTA תלויי-JS + תוויות טופס שבורות</li>
+      </ul>
+    </div>
+    <div class="goal">
+      <span class="gt">הקטנת Bounce / Exit</span>
+      <span class="verdict" style="color:var(--warn)">נמדד חלקית</span>
+      <ul>
+        <li>נטישה ממומנת בדף הבית: 90.9%</li>
+        <li>פער מובייל–דסקטופ: 22 נק'</li>
+        <li><b>Exit rate בלתי שמיש</b> — Clarity החזירה 950%, 500%, 400%</li>
+        <li><b>החסם:</b> זמן טעינה</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">06</span>תנועה ממומנת — יום אחד מתוך שבעה</h2>
+  <p class="lede">אף המלצת UX בדוח הזה לא תשפיע אם אין תנועה. סשנים ממומנים לפי יום:</p>
+  <div class="panel">
+    <div class="days">
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">07/09</span></div>
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">08/09</span></div>
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">09/09</span></div>
+      <div class="day on"><span class="n">25</span><span class="col" style="height:100%"></span><span class="d">10/09</span></div>
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">11/09</span></div>
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">12/09</span></div>
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">13/09</span></div>
+      <div class="day"><span class="n">0</span><span class="col" style="height:2%"></span><span class="d">14/09</span></div>
+    </div>
+    <p style="font-size:14px;color:var(--ink-2);margin-bottom:0;margin-top:16px">ייתכן ש-13/09 הושהה ביודעין לראש השנה. <b>זה אינו מסביר את 11/09, 12/09 ו-14/09.</b> לבדוק: יתרת תקציב, תוקף אמצעי תשלום, סטטוס קמפיינים, אישור מודעות.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">07</span>המלצות מדורגות</h2>
+  <div class="recs">
+    <div class="rec p0"><span class="sev">P0</span><div>
+      <h3>כפתורי "חיוג מהיר" ו"וואטסאפ" תלויי-JavaScript</h3>
+      <div class="ev">מטרה 2 · 6+ לחיצות מתות, 3 עמודים · 24–48 שעות</div>
+      <p>לעטוף בקישור <span class="mono">href</span> ישיר (<span class="mono">tel:</span> / <span class="mono">wa.me</span>) שעובד לפני טעינת ה-JS. כרגע הכפתור מת בחלון שבין רינדור ה-HTML לטעינת הסקריפט.</p>
+      <div class="kpi-line">מדד: אפס Dead clicks על CTA בשבוע העוקב</div>
+    </div></div>
+
+    <div class="rec p0"><span class="sev">P0</span><div>
+      <h3>החזרת רצף התנועה הממומנת</h3>
+      <div class="ev">כל המטרות · יום פעיל אחד מתוך שבעה · מיידי</div>
+      <p>הפעולה בעלת ההשפעה הגדולה ביותר בדוח. שבעה ימים ללא תנועה הם שבעה ימים ללא לידים, וכל שאר ההמלצות מותנות בה.</p>
+      <div class="kpi-line">מדד: 7 ימים רצופים עם תנועה ממומנת</div>
+    </div></div>
+
+    <div class="rec p0"><span class="sev">P0</span><div>
+      <h3>זמן טעינה של 76.5 שניות בדף הבית</h3>
+      <div class="ev">מטרות 1+2+3 · LCP 75.0s — הגרוע באתר · 24–48 שעות</div>
+      <p>דחיסת תמונות, טעינה עצלה, צמצום תוספי Elementor. זהו גם המכפיל של באג ה-CTA: ככל שהטעינה ארוכה, חלון הכפתור המת גדל.</p>
+      <div class="kpi-line">מדד: טעינה מתחת ל-3 שניות, LCP מתחת ל-2.5 שניות</div>
+    </div></div>
+
+    <div class="rec p1"><span class="sev">P1</span><div>
+      <h3>תוויות טופס לא מקושרות לשדות</h3>
+      <div class="ev">מטרה 2 · ההמרה האיכותית ביותר באתר · שבוע</div>
+      <p>קישור <span class="mono">label</span> לשדה באמצעות <span class="mono">for</span>/<span class="mono">id</span>. לא לסנן כ-False Positive — זה באג נגישות אמיתי.</p>
+      <div class="kpi-line">מדד: אפס לחיצות מתות על תוויות, עלייה באירועי SubmitForm</div>
+    </div></div>
+
+    <div class="rec p1"><span class="sev">P1</span><div>
+      <h3>העלאת ה-CTA מעל קו ה-35%</h3>
+      <div class="ev">מטרות 1+2 · עומק גלילה יציב ב-3 מדידות · שבוע</div>
+      <p>כל CTA מתחת ל-35% מגובה העמוד אינו נצפה על ידי הרוב. להעלות הצעת ערך וכפתור פנייה אל מעל הקיפול.</p>
+      <div class="kpi-line">מדד: עומק גלילה מעל 45%, נטישה ממומנת מתחת ל-80%</div>
+    </div></div>
+
+    <div class="rec p1"><span class="sev">P1</span><div>
+      <h3>CTA בתוך אזור ה-FAQ</h3>
+      <div class="ev">מטרות 1+2 · סשן 13/09: 5:15 דק', 7 קליקים, אפס פנייה · שבוע</div>
+      <p>שם נמצאת תשומת הלב בפועל. הצעת התייעצות בתוך האקורדיון תופיע בדיוק בנקודת העניין, במקום להמתין לגולש בתחתית שאליה הוא לא מגיע.</p>
+      <div class="kpi-line">מדד: לפחות המרה אחת שמקורה באזור ה-FAQ</div>
+    </div></div>
+
+    <div class="rec p2"><span class="sev">P2</span><div>
+      <h3>הסרת עיצוב "לחיץ" מטקסט תוכן</h3>
+      <div class="ev">מטרות 1+3 · 23 מתוך 24 הלחיצות המתות · חודש</div>
+      <p>להסיר סגנונות שמשדרים לחיצות מכותרות ופסקאות, או להפוך את הבלוקים לקישורים אמיתיים — האפשרות השנייה עדיפה אם התוכן אכן מוביל למשהו.</p>
+      <div class="kpi-line">מדד: מתחת ל-8 לחיצות מתות מקטגוריה זו בשבוע</div>
+    </div></div>
+
+    <div class="rec p2"><span class="sev">P2</span><div>
+      <h3>פער מובייל–דסקטופ של 22 נקודות</h3>
+      <div class="ev">מטרה 3 · מובייל = מחצית מהתנועה · חודש</div>
+      <p>בדיקת גדלי מגע, קריאות טקסט וסדר אלמנטים במובייל.</p>
+      <div class="kpi-line">מדד: צמצום הפער ל-12 נקודות</div>
+    </div></div>
+
+    <div class="rec p2"><span class="sev">P2</span><div>
+      <h3>תיקון CLS בעמודי תוכן</h3>
+      <div class="ev">מטרות 1+3 · נמדדו 0.94 · 0.90 · 0.68 · 0.57 · 0.42 מול סף 0.1 · חודש</div>
+      <p>שמירת מקום מראש לתמונות ולאלמנטים נטענים.</p>
+      <div class="kpi-line">מדד: CLS מתחת ל-0.1 בכל העמודים</div>
+    </div></div>
+
+    <div class="rec p3"><span class="sev">P3</span><div>
+      <h3>ניקוי מדידה</h3>
+      <div class="ev">רבעון</div>
+      <p>תיוג UTM לערוץ "Other" (37% מהתנועה ב-14/09 ללא סיווג) · אימות המרות מול יומן שיחות (3 מתוך 5 ב-14/09 סווגו כאמינות נמוכה) · בדיקת Final URL Expansion — 11 סשנים ממומנים נחתו על דף הבית מקמפיין ממוקד.</p>
+    </div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="k">08</span>מה לא לסמוך עליו</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>נושא</th><th>הבעיה</th><th>מה לעשות</th></tr></thead>
+      <tbody>
+        <tr><td><b>Exit rate</b></td><td>ערכים מעל 100% — עד 950%</td><td>להתעלם לחלוטין</td></tr>
+        <tr><td>נטישה כללית</td><td>76.42% כללי נמוך מכל ערוץ בנפרד — לא מתיישב אריתמטית</td><td>מגמה יחסית בלבד, לא ערך מוחלט</td></tr>
+        <tr><td>Smart Events</td><td>הדשבורד מדווח 78 ContactUs ו-101 OutboundClick; ההקלטות מראות 6 המרות בפועל</td><td>הדשבורד סופר אירועים ולא סשנים — להסתמך על טבלת ההמרות המאומתת</td></tr>
+        <tr><td>ייחוס מקור</td><td>63.6% מהסשנים הממומנים ללא מקור מזוהה</td><td>להשלים מדוח "Where your ads showed"</td></tr>
+        <tr><td>מדגם דף הבית</td><td>60 סשנים, 3 המרות</td><td>מספיק לזיהוי תבנית, לא לחישוב שיעור המרה מדויק</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  הופק מדוחות Microsoft Clarity לתקופה 05/09/2026 – 14/09/2026 · דף השורש של מרכזיות-טלפונים.org.il בלבד · מפת חום ויזואלית ורשימת הקלטות מלאה דורשות ייצוא מממשק Clarity
+</footer>
+
+</div>
