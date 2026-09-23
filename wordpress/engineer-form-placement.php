@@ -2,12 +2,10 @@
 /**
  * Engineer-contact form placement for single posts.
  *
- * Where the form goes:
- *   1. Above the H2 that starts with "חסכו כסף", if the post has one.
- *   2. Otherwise above the second top-level H2.
- *   3. Otherwise at the end of the post.
- * An H2 counts only if it isn't nested in a <div>, <aside>, <section>,
- * <blockquote> or <figure>, so the form never lands inside a tip box.
+ * The form goes above the second top-level H2, or at the end of the post
+ * if there are fewer than two. An H2 counts only if it isn't nested in a
+ * container (div, table, figure, ...), so the form never lands inside a
+ * tip box, table or other template block.
  *
  * Install (WPCode):
  *   - In the existing form snippet, change Insert Method to "Shortcode"
@@ -21,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 const EF_FORM_SNIPPET_ID = 0; // ← ID of the existing form snippet in WPCode.
-const EF_ANCHOR_PREFIX   = 'חסכו כסף';
+const EF_TARGET_H2       = 2;  // Insert above the Nth top-level H2.
 
 add_filter( 'the_content', 'ef_place_engineer_form', 20 );
 
@@ -51,32 +49,25 @@ function ef_place_engineer_form( $content ) {
  * Byte offset of the H2 to insert before, or null if there is none.
  */
 function ef_find_insert_offset( $content ) {
-	if ( ! preg_match_all( '/<h2\b[^>]*>(.*?)<\/h2>/is', $content, $matches, PREG_OFFSET_CAPTURE ) ) {
+	if ( ! preg_match_all( '/<h2\b/i', $content, $matches, PREG_OFFSET_CAPTURE ) ) {
 		return null;
 	}
 
-	$top_level = array();
-	foreach ( $matches[0] as $i => $match ) {
-		$offset = $match[1];
-		if ( ! ef_is_top_level( substr( $content, 0, $offset ) ) ) {
-			continue;
+	$count = 0;
+	foreach ( $matches[0] as $match ) {
+		if ( ef_is_top_level( substr( $content, 0, $match[1] ) ) && ++$count === EF_TARGET_H2 ) {
+			return $match[1];
 		}
-
-		$text = trim( html_entity_decode( wp_strip_all_tags( $matches[1][ $i ][0] ), ENT_QUOTES, 'UTF-8' ) );
-		if ( 0 === strpos( $text, EF_ANCHOR_PREFIX ) ) {
-			return $offset;
-		}
-		$top_level[] = $offset;
 	}
 
-	return isset( $top_level[1] ) ? $top_level[1] : null;
+	return null;
 }
 
 /**
  * True when every container opened in $before has been closed.
  */
 function ef_is_top_level( $before ) {
-	foreach ( array( 'div', 'aside', 'section', 'blockquote', 'figure' ) as $tag ) {
+	foreach ( array( 'div', 'aside', 'section', 'blockquote', 'figure', 'table', 'details', 'nav', 'ul', 'ol' ) as $tag ) {
 		$opened = preg_match_all( '/<' . $tag . '\b/i', $before );
 		$closed = preg_match_all( '/<\/' . $tag . '\s*>/i', $before );
 		if ( $opened > $closed ) {
