@@ -44,8 +44,23 @@ Remote Control לכל מי שמושך את הריפו.
 כברירת מחדל, ורק Owner מדליק אותו ב-[claude.ai/admin-settings/claude-code](https://claude.ai/admin-settings/claude-code).
 לפירוט בדיקה-בדיקה הרץ `claude doctor`.
 
+## Google Search Console מתוך Claude Code
+
+הריפו מגדיר גם שרת MCP מקומי ל-Search Console ב-[`.mcp.json`](.mcp.json)
+(החבילה `mcp-server-gsc`). הוא רץ על המכונה שלך, מדבר ישירות עם Google API דרך
+Service Account, וזמין בסשן ה-VS Code — וגם מהנייד דרך Remote Control.
+
+```bash
+./scripts/setup-gsc-mcp.sh ~/Downloads/<service-account-key>.json   # התקנת מפתח + בדיקה
+./scripts/setup-gsc-mcp.sh --check                                    # בדיקה בלבד
+```
+
+המפתח נשמר ב-`.secrets/` שמוחרג מ-git. הקמה מלאה, רשימת הכלים ופתרון תקלות:
+[docs/gsc-mcp.md](docs/gsc-mcp.md).
+
 ## עוד
 
+* [docs/gsc-mcp.md](docs/gsc-mcp.md) — Search Console MCP: הקמת Service Account, כלים, תקלות.
 * [docs/remote-control-vscode.md](docs/remote-control-vscode.md) — מגבלות התוסף, פקודות
   שעובדות מהנייד, התראות פוש, ופתרון תקלות לפי הודעת השגיאה.
 * דרישות: מנוי Pro / Max / Team / Enterprise. מפתחות API אינם נתמכים.

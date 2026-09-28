@@ -1,0 +1,3 @@
+# Google service-account keys for the Search Console MCP server. Never commit.
+.secrets/
+*.gserviceaccount.json
