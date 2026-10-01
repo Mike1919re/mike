@@ -48,7 +48,8 @@ Remote Control לכל מי שמושך את הריפו.
 
 הריפו מגדיר גם שרת MCP מקומי ל-Search Console ב-[`.mcp.json`](.mcp.json)
 (החבילה `mcp-server-gsc`). הוא רץ על המכונה שלך, מדבר ישירות עם Google API דרך
-Service Account, וזמין בסשן ה-VS Code — וגם מהנייד דרך Remote Control.
+Service Account, וזמין בסשן ה-VS Code — וגם מהנייד דרך Remote Control. לסשני ענן
+(claude.ai/code) מוסיפים את המפתח כסוד סביבה בשם `GSC_SERVICE_ACCOUNT_JSON`.
 
 ```bash
 ./scripts/setup-gsc-mcp.sh ~/Downloads/<service-account-key>.json   # התקנת מפתח + בדיקה

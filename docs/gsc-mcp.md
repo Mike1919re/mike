@@ -4,8 +4,10 @@
 `teleco.co.il` ו-`מרכזיות-טלפונים.org.il`. השרת רץ **על המכונה שלך**, מדבר ישירות
 עם Google API דרך Service Account, ולא עובר דרך שום צד שלישי.
 
-החבילה: [`mcp-server-gsc`](https://www.npmjs.com/package/mcp-server-gsc) (MIT), מוצמדת
-לגרסה 0.3.0 ב-[`.mcp.json`](../.mcp.json). `npx` מוריד אותה בהפעלה הראשונה.
+החבילה: [`mcp-server-gsc`](https://www.npmjs.com/package/mcp-server-gsc) (MIT).
+[`.mcp.json`](../.mcp.json) מפעיל את [`scripts/gsc-mcp.sh`](../scripts/gsc-mcp.sh), שמוצא
+את המפתח ומריץ את החבילה בגרסה נעולה (0.3.0, משתנה `VERSION` בסקריפט). `npx` מוריד
+אותה בהפעלה הראשונה.
 
 ## הקמה (פעם אחת, כ-10 דקות)
 
@@ -48,7 +50,7 @@
 ```
 
 רוצה לשמור את המפתח מחוץ לריפו? `export GSC_CREDENTIALS_FILE=/path/key.json`
-בפרופיל ה-shell — גם `.mcp.json` וגם הסקריפט מכבדים את זה.
+בפרופיל ה-shell — גם המשגר וגם סקריפט הבדיקה מכבדים את זה.
 
 ### 5. הפעלה ב-VS Code
 
@@ -58,6 +60,20 @@
 
 הסשן הזה, כולל שרת ה-MCP, ממשיך לעבוד גם מהנייד דרך Remote Control
 (ראה [README](../README.md)) — השרת רץ על המכונה שלך והנייד הוא רק חלון אליו.
+
+### 6. גם מסשן ענן (claude.ai/code)
+
+סשן ענן רץ בקונטיינר נפרד, בלי הקבצים שעל המכונה שלך, ולכן `.secrets/` ריק שם.
+כדי שהשרת יעבוד גם משם:
+
+1. בתפריט סביבת הענן של הסשן (בשורת הכותרת) → **Edit** → הוסף משתנה סביבה סודי
+   בשם **`GSC_SERVICE_ACCOUNT_JSON`**, והדבק בו את **תוכן** קובץ ה-JSON של המפתח
+   (השורה כולה, כפי שהיא).
+2. פתח סשן ענן חדש. בהפעלה הראשונה `gsc-mcp.sh` כותב את התוכן ל-`.secrets/`
+   (הרשאות 600) ומריץ את השרת.
+
+סדר החיפוש של המפתח: `GSC_CREDENTIALS_FILE` → `.secrets/gsc-service-account.json`
+→ `GSC_SERVICE_ACCOUNT_JSON`. אל תדביק את המפתח לצ'אט לעולם — רק להגדרות הסביבה.
 
 ## הכלים שהשרת חושף
 
@@ -108,4 +124,5 @@
 | `X is NOT visible to gsc-mcp@...` | ה-Service Account לא נוסף כמשתמש בנכס. שלב 3. |
 | `0 properties visible` | כנ"ל, לאף נכס. |
 | `/mcp` מראה `gsc` failed | הרץ `./scripts/setup-gsc-mcp.sh --check`; אם עובר, הרץ `/mcp` → reconnect. בדוק ש-`node -v` הוא 18 ומעלה. |
+| `ENOENT ... .secrets/gsc-service-account.json` בסשן ענן | אין מפתח בקונטיינר. שלב 6: הוסף את הסוד `GSC_SERVICE_ACCOUNT_JSON` לסביבה ופתח סשן חדש. |
 | `index_inspect` מחזיר 403 | הרשאת Restricted לא מספיקה; העלה ל-Full בנכס. |
