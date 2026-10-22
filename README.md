@@ -59,9 +59,20 @@ Service Account, וזמין בסשן ה-VS Code — וגם מהנייד דרך R
 המפתח נשמר ב-`.secrets/` שמוחרג מ-git. הקמה מלאה, רשימת הכלים ופתרון תקלות:
 [docs/gsc-mcp.md](docs/gsc-mcp.md).
 
+### רוטינה שבועית (ימי חמישי, על המחשב שלך)
+
+```bash
+./scripts/gsc-weekly.sh                 # עכשיו: דוח 28 יום + המלצות בעברית -> reports/gsc/
+./scripts/install-gsc-weekly.sh         # כל יום חמישי 09:00, רק כשהמחשב דלוק
+```
+
+Quick wins, עמודים בירידה, קניבליזציה ועמודי השירות החשובים, לשני האתרים.
+פירוט: [docs/gsc-weekly.md](docs/gsc-weekly.md).
+
 ## עוד
 
 * [docs/gsc-mcp.md](docs/gsc-mcp.md) — Search Console MCP: הקמת Service Account, כלים, תקלות.
+* [docs/gsc-weekly.md](docs/gsc-weekly.md) — הרוטינה השבועית: מה בדוח, תזמון, כוונון.
 * [docs/remote-control-vscode.md](docs/remote-control-vscode.md) — מגבלות התוסף, פקודות
   שעובדות מהנייד, התראות פוש, ופתרון תקלות לפי הודעת השגיאה.
 * דרישות: מנוי Pro / Max / Team / Enterprise. מפתחות API אינם נתמכים.

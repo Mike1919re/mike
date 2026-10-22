@@ -1,0 +1,29 @@
+{
+  "sites": [
+    {
+      "host": "teleco.co.il",
+      "label": "Telecom Expert",
+      "importantPages": [
+        "/(fiber|siv|optic|קו-תמסורת|סיב)",
+        "/(pbx|cloud|מרכזי)",
+        "/(sms|מסרון)",
+        "/(virtual|מספר)",
+        "/(call-?center|מוקד)",
+        "^https?://[^/]+/?$"
+      ]
+    },
+    {
+      "host": "מרכזיות-טלפונים.org.il",
+      "label": "מרכזיות טלפונים",
+      "importantPages": [
+        "^https?://[^/]+/?$",
+        "/(pbx|cloud|voip|מרכזי|ענן)"
+      ]
+    }
+  ],
+  "window": { "days": 28, "lagDays": 3 },
+  "quickWins": { "positionMin": 4, "positionMax": 20, "minImpressions": 100 },
+  "decline": { "minClicksPrev": 10, "minDropPct": 25 },
+  "cannibalization": { "minImpressions": 100, "minSharePct": 20 },
+  "limits": { "topQueries": 25, "topPages": 15, "quickWins": 20, "declines": 15, "cannibalization": 10 }
+}
