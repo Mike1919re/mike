@@ -75,6 +75,13 @@
 סדר החיפוש של המפתח: `GSC_CREDENTIALS_FILE` → `.secrets/gsc-service-account.json`
 → `GSC_SERVICE_ACCOUNT_JSON`. אל תדביק את המפתח לצ'אט לעולם — רק להגדרות הסביבה.
 
+### 7. בלי מפתח בכלל: חיבור Composio
+
+אם חשבון Google Search Console מחובר ב-Composio (claude.ai → Connectors → Composio),
+Claude יכול לשלוף את הנתונים מכל סשן, גם בענן, בלי Service Account ובלי קובץ מפתח.
+הנתונים עוברים דרך Composio. השרת המקומי בריפו נשאר הדרך הפרטית, והחיבור הזה
+הוא הדרך הזמינה-מכל-מקום. בבקשה בסשן: "שלוף נתוני Search Console דרך Composio".
+
 ## הכלים שהשרת חושף
 
 | כלי | מה עושה |
