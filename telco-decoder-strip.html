@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סטריפ מפענח - תבנית</title>
+<style>
+  /* ===== סטריפ "הידעת?" → מיניסייט המפענח ===== */
+  .tk-strip{
+    --tk-navy:#1b2250; --tk-red:#b3262e; --tk-bg:#e9edf3; --tk-line:#c9d0dc;
+    display:flex; align-items:center; gap:16px;
+    margin:28px 0; padding:18px 22px;
+    background:var(--tk-bg); border:1px solid var(--tk-line);
+    border-right:5px solid var(--tk-red);          /* הפס האדום מימין, כמו בדוגמה */
+    border-radius:2px; text-decoration:none; color:var(--tk-navy);
+    font-family:inherit; line-height:1.5; cursor:pointer;
+    transition:background .15s, box-shadow .15s;
+  }
+  .tk-strip:hover,.tk-strip:focus-visible{background:#dfe5ee; box-shadow:0 2px 10px rgba(27,34,80,.15);}
+  .tk-strip:focus-visible{outline:3px solid var(--tk-navy); outline-offset:2px;}
+  .tk-strip__tri{flex:none; width:0;height:0; border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:11px solid var(--tk-navy);}
+  .tk-strip__text{flex:1; font-size:18px; font-weight:700;}
+  .tk-strip__q{color:var(--tk-red); margin-inline-end:6px;}
+  .tk-strip__cta{
+    flex:none; display:inline-flex; align-items:center; gap:8px;
+    background:var(--tk-navy); color:#fff; font-weight:700; font-size:15px;
+    padding:10px 16px; border-radius:4px; white-space:nowrap;
+  }
+  .tk-strip__cta svg{width:15px;height:15px;flex:none}   /* אייקון "יציאה מהעמוד" */
+  .tk-strip__note{display:block; margin-top:4px; font-size:12.5px; font-weight:400; color:#4a5275;}
+  @media (max-width:600px){
+    .tk-strip{flex-wrap:wrap; padding:16px;}
+    .tk-strip__tri{display:none}
+    .tk-strip__text{flex-basis:100%; font-size:17px}
+    .tk-strip__cta{width:100%; justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== הדבק את הבלוק הזה אחרי הפסקה השנייה במאמר ====== -->
+<a class="tk-strip"
+   href="https://REPLACE-WITH-DECODER-MINISITE/?utm_source=telco&utm_medium=article_strip&utm_campaign=decoder&utm_content=ARTICLE_SLUG"
+   target="_blank" rel="noopener"
+   data-track="decoder-strip"
+   aria-label="הידעת? על אותו שירות בדיוק, ההפרש בין החברות יכול להגיע לאלפי שקלים בשנה. למפענח חיסכון בהוצאות התקשורת, נפתח באתר נפרד">
+  <span class="tk-strip__tri" aria-hidden="true"></span>
+  <span class="tk-strip__text">
+    <span class="tk-strip__q">הידעת?</span>על אותו שירות בדיוק, ההפרש בין החברות יכול להגיע לאלפי שקלים בשנה
+    <span class="tk-strip__note">המפענח של טלקו בודק כמה אפשר לחסוך בחשבון התקשורת שלכם</span>
+  </span>
+  <span class="tk-strip__cta">
+    למפענח החיסכון
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>
+    </svg>
+  </span>
+</a>
+<!-- ====== סוף הבלוק ====== -->
+
+</body>
+</html>
