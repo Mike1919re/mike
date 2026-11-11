@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>סטריפ טלקום אקספרט - תבנית</title>
 <style>
-  /* ===== סטריפ "הידעת?" → מיניסייט המפענח ===== */
+  /* ===== סטריפ "הידעת?" → מיניסייט טלקום אקספרט ===== */
   .tk-strip{
     --tk-navy:#1b2250; --tk-red:#b3262e; --tk-bg:#e9edf3; --tk-line:#c9d0dc;
     display:flex; align-items:center; gap:16px;
@@ -38,11 +38,11 @@
 </head>
 <body>
 
-<!-- ====== הדבק את הבלוק הזה אחרי הפסקה השנייה במאמר ====== -->
+<!-- ====== גרסה A: הדבק אחרי הפסקה השנייה ====== -->
 <a class="tk-strip"
-   href="https://REPLACE-WITH-MINISITE/?utm_source=telco&utm_medium=article_strip&utm_campaign=savings_check&utm_content=ARTICLE_SLUG"
+   href="https://REPLACE-WITH-MINISITE/?utm_source=telco&utm_medium=article_strip&utm_campaign=savings_check&utm_content=A_ARTICLE_SLUG"
    target="_blank" rel="noopener"
-   data-track="savings-strip"
+   data-track="savings-strip" data-variant="A"
    aria-label="הידעת? ההפרש בין החברות יכול להגיע לאלפי שקלים בשנה. בדקו כמה העסק שלכם יכול לחסוך עם טלקום אקספרט, נפתח באתר נפרד">
   <span class="tk-strip__tri" aria-hidden="true"></span>
   <span class="tk-strip__text">
@@ -56,7 +56,27 @@
     </svg>
   </span>
 </a>
-<!-- ====== סוף הבלוק ====== -->
+<!-- ====== סוף גרסה A ====== -->
+
+<!-- ====== גרסה B: הדבק אחרי הפסקה השנייה ====== -->
+<a class="tk-strip"
+   href="https://REPLACE-WITH-MINISITE/?utm_source=telco&utm_medium=article_strip&utm_campaign=savings_check&utm_content=B_ARTICLE_SLUG"
+   target="_blank" rel="noopener"
+   data-track="savings-strip" data-variant="B"
+   aria-label="הידעת? רוב העסקים משלמים על התקשורת מאות שקלים בחודש יותר ממה שצריך. בדקו כמה העסק שלכם יכול לחסוך עם טלקום אקספרט, נפתח באתר נפרד">
+  <span class="tk-strip__tri" aria-hidden="true"></span>
+  <span class="tk-strip__text">
+    <span class="tk-strip__q">הידעת?</span>רוב העסקים משלמים על התקשורת מאות שקלים בחודש יותר ממה שצריך
+    <span class="tk-strip__note">טלקום אקספרט מנתחים את חשבון התקשורת של העסק ומראים לכם איפה הכסף בורח</span>
+  </span>
+  <span class="tk-strip__cta">
+    בדקו כמה תחסכו
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>
+    </svg>
+  </span>
+</a>
+<!-- ====== סוף גרסה B ====== -->
 
 </body>
 </html>
